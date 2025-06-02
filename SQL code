@@ -1,0 +1,197 @@
+CREATE TABLE HistoricalFigures (
+    id INT PRIMARY KEY,
+    name VARCHAR(100),
+    lived VARCHAR(50),
+    country_of_birth VARCHAR(100),
+    main_area VARCHAR(100),
+    biography TEXT
+);
+
+INSERT INTO HistoricalFigures (id, name, lived, country_of_birth, main_area, biography) VALUES
+(1, 'Augusta Ada King (Lovelace)', '1815 - 1852', 'Britain', 'Mathematics, computing', 'Possible for computers to do more than simple calculations, perhaps even write music.'),
+(2, 'Mary Cartwright', '1900 - 1998', 'Britain', 'Mathematics', 'Emerged when modelling radio and RADAR signals. These observations would later contribute to Chaos Theory.'),
+(3, 'Rosalind Franklin', '1920 - 1958', 'Britain', 'Biology, Physics', 'Discovered the link between molecular structure of types of coal and physical properties, helping improve selection processes for fuels.'),
+(4, 'Hertha Ayrton', '1854 - 1923', 'Britain', 'Engineer, mathematician, physicist', 'Became the first female member of the IEE. Denied follow-up publication at Royal Society.'),
+(5, 'Dorothy Hodgkin', '1910 - 1994', 'Britain', 'Biology, Chemistry', 'Confirmed the structure of penicillin and discovered the structures of Vitamin B12 and Insulin.'),
+(6, 'Hypatia Alexandria', '360 - 415', 'Egypt', 'Mathematics, Astronomy', 'Taught many leading philosophers and mathematicians. Continued her father’s work.'),
+(7, 'Émilie du Châtelet', '1706 - 1749', 'France', 'Mathematics, physics', 'Translated and commented on Newton\'s Principia, contributing to the scientific revolution.'),
+(8, 'Marie-Sophie Germain', '1776 - 1831', 'France', 'Mathematics, physics', 'Mentored by Legendre, worked under pseudonym due to gender bias.'),
+(9, 'Irène Joliot-Curie', '1897 - 1956', 'France', 'Chemistry, Physics', 'Discovered neutron weight and helped with nuclear reactor development.'),
+(10, 'Yvonne Choquet-Bruhat', '1923 -', 'France', 'Mathematics, physics', 'Worked on Yang-Mills and General Relativity equations.'),
+(11, 'Emmy Noether', '1882 - 1935', 'Germany', 'Mathematics, physics', 'Noether\'s Theorem relates symmetries and conservation laws, critical to modern physics.'),
+(12, 'Ida Noddack', '1896 - 1978', 'Germany', 'Chemistry, Physics', 'Critiqued Fermi\'s chemical proof, proposed concept similar to nuclear fission.'),
+(13, 'Maria Goeppert Mayer', '1906 - 1972', 'Germany', 'Physics', 'Developed nuclear shell model; won Nobel Prize.'),
+(14, 'Maria Gaetana Agnesi', '1718 - 1799', 'Italy', 'Mathematics', 'Appointed university math professor; published analytical mathematics books.'),
+(15, 'Fumiko Yonezawa', '1938 - 2019', 'Japan', 'Physics, computing', 'First female president of the Physics Society of Japan; won UNESCO award.'),
+(16, 'Marie Skłodowska Curie', '1867 - 1934', 'Poland', 'Physics, Chemistry', 'Discovered radium and polonium; developed theory of radioactivity.'),
+(17, 'Julia Lermontova', '1846 - 1919', 'Russia', 'Chemistry', 'First Russian woman to receive doctorate in chemistry; studied in Heidelberg and Göttingen.'),
+(18, 'Mileva Marić', '1875 - 1948', 'Serbia', 'Mathematics, physics', 'Possible collaborator on Einstein\'s work in 1905; subject of ongoing debate.'),
+(19, 'Sophia Brahe', '1559 - 1643', 'Sweden', 'Astronomy, chemistry, and medicine', 'Assisted Tycho Brahe; created detailed astronomical records.'),
+(20, 'Maria Christina Bruhn', '1732 - 1808', 'Sweden', 'Chemistry', 'Improved cardboard cartridges; reported to Royal Swedish Academy of Sciences.'),
+(21, 'Grace Hopper', '1906 - 1992', 'USA', 'Computing', 'Created one of the first linkers; worked on COBOL and machine-independent programming.'),
+(22, 'Stephanie Kwolek', '1923 - 2014', 'USA', 'Chemistry', 'Invented Kevlar; awarded Chemical Pioneer Award.'),
+(23, 'Katherine Johnson', '1918 - 2020', 'USA', 'Mathematics', 'Worked on Mercury project and Apollo mission trajectories.'),
+(24, 'Mary Jackson', '1921 - 2004', 'USA', 'Mathematics', 'Worked as engineer in several NASA research divisions.'),
+(25, 'Sofya Kovalevskaya', '1850 - 1891', 'Russia', 'Mathematics', 'Worked on Cauchy–Kovalevskaya theorem; first female math professor in Europe.'),
+(26, 'Maryam Mirzakhani', '1977 - 2017', 'Iran', 'Mathematics', 'Studied geometry and moduli spaces; first Iranian to win Fields Medal.');
+
+
+-- Historical Figures Table
+CREATE TABLE HistoricalFigures (
+    FigureID INT PRIMARY KEY,
+    Name VARCHAR(100) NOT NULL
+);
+
+-- Venues Table
+CREATE TABLE Venues (
+    VenueID INT PRIMARY KEY,
+    RoomName VARCHAR(100) NOT NULL,
+    RoomType VARCHAR(50) CHECK (RoomType IN ('Lecture Room', 'Event Room'))
+);
+
+-- Events Table
+CREATE TABLE Events (
+    EventID INT PRIMARY KEY,
+    Title VARCHAR(255) NOT NULL,
+    Date DATE NOT NULL,
+    TimeStart TIME NOT NULL,
+    TimeEnd TIME NOT NULL,
+    VenueID INT NOT NULL,
+    TicketRequired BOOLEAN NOT NULL,
+    FOREIGN KEY (VenueID) REFERENCES Venues(VenueID)
+);
+
+-- Speakers Table
+CREATE TABLE Speakers (
+    SpeakerID INT PRIMARY KEY,
+    Name VARCHAR(100) NOT NULL,
+    Affiliation VARCHAR(255)
+);
+
+-- EventSpeakers Table (many-to-many relationship)
+CREATE TABLE EventSpeakers (
+    EventID INT,
+    SpeakerID INT,
+    PRIMARY KEY (EventID, SpeakerID),
+    FOREIGN KEY (EventID) REFERENCES Events(EventID),
+    FOREIGN KEY (SpeakerID) REFERENCES Speakers(SpeakerID)
+);
+
+-- EventFigures Table (many-to-many relationship between Events and Historical Figures)
+CREATE TABLE EventFigures (
+    EventID INT,
+    FigureID INT,
+    PRIMARY KEY (EventID, FigureID),
+    FOREIGN KEY (EventID) REFERENCES Events(EventID),
+    FOREIGN KEY (FigureID) REFERENCES HistoricalFigures(FigureID)
+);
+]
+
+
+INSERT INTO Venues (VenueID, RoomName, RoomType)
+VALUES (1, 'Lecture Room 2', 'Lecture Room');
+
+-- Insert Event
+INSERT INTO Events (EventID, Title, Date, TimeStart, TimeEnd, VenueID, TicketRequired)
+VALUES (1, 'Katherine Johnson: The Hidden Figure Who Launched America into Space', '2025-10-05', '14:00:00', '15:30:00', 1, TRUE);
+
+-- Insert Speaker
+INSERT INTO Speakers (SpeakerID, Name, Affiliation)
+VALUES (1, 'Dr. Maya Ross', 'Astrophysicist and Historian of Space Science');
+
+-- Link Speaker to Event
+INSERT INTO EventSpeakers (EventID, SpeakerID)
+VALUES (1, 1);
+
+-- Insert Historical Figure (if not already present)
+INSERT INTO HistoricalFigures (FigureID, Name)
+VALUES (1, 'Katherine Johnson');
+
+-- Link Historical Figure to Event
+INSERT INTO EventFigures (EventID, FigureID)
+VALUES (1, 1);
+🦈
+INSERT INTO Speakers (SpeakerID, Name, Affiliation)
+VALUES (1, 'Dr. Maya Ross', 'Astrophysicist and Historian of Space Science');
+
+-- Link Speaker to Event
+INSERT INTO EventSpeakers (EventID, SpeakerID)
+VALUES (1, 1);
+
+
+select * from person 
+where nationality = 'france'; 
+ Output:
+●Émilie du Châtelet
+●Marie-Sophie Germain
+●Irène Joliot-Curie
+●Yvonne Choquet-Bruhat
+
+
+
+2.List all historical figures that contributed to Computing
+To list all the historical figures that contributed to computing, we will do a similar code from the first question which is:
+
+select * from person
+where field = 'computing';
+
+
+
+List all historical figures that contributed to more than 1 field
+3.To list the historical figures that contribute to more than 1 field we put the code:
+select name, Field
+from scientists
+where field like '%,%';
+
+4.Update Mary Jackson’s incorrect death year
+select *from person
+update person
+set lived = '1921-2005'
+where name = 'Mary Jackson';
+
+5.List all historical figures who died before they were 40 
+
+SELECT Name, Lived,
+       CAST(SUBSTRING_INDEX(Lived, ' - ', -1) AS UNSIGNED) -
+       CAST(SUBSTRING_INDEX(Lived, ' - ', 1) AS UNSIGNED) AS AgeAtDeath
+FROM person
+WHERE (
+    CAST(SUBSTRING_INDEX(Lived, ' - ', -1) AS UNSIGNED) -
+    CAST(SUBSTRING_INDEX(Lived, ' - ', 1) AS UNSIGNED)
+) < 40;
+
+6.select name, main_area
+from person
+where main_area like '%,%';
+
+
+7.Which countries have the most historical figures listed
+To figure out which countries have the most historical figures, the code to use it :
+SELECT country_of_birth, COUNT(*) AS NumOfFigures
+FROM person
+GROUP BY country_of_birth
+ORDER BY NumOfFigures DESC;
+
+8.Are any historical figures still alive? If so who
+If we were asking if any of the historical figures from the list are still alive, then no.
+Which historical figures worked for NASA 
+There are two notable figures:Katherine Johnso, a mathematician who has played a important role in calculating the trajectories and launch windows for major NASA mission including Apollo 11, the space SHuttle  program, and project Mercury  and mary jackson, an aerospace engineering
+Who has worked  across multiple divisions  at NASA she is know for her contribution to aerodynamic data  is important to the advancement of supersonic flight 
+
+
+
+
+9.Which historical figures worked with Einstein? 
+These historical figures made remarkable contributions to ste, they have made the foundation for future development of the principle across many disciplines, Mileva Maric was a very talented mathematician and physicist, and notably the fist wife of albert einstein.Yvonne Choquet-Bruhat asle was a mathematician  and a physicists  who worked with einstein directly 
+And has made a very big impact  by proving the existence of a local and uniqueness of solution to einstein vacuum equations  and the last person to work with einstein  was Emmy Noether was a pioneering theoretical physicist and a mathematician whose work specially the Neothers’s Theorem  addressed a fundamental issue in Einstein's theory  of general relativity.Though she and einstein did not work together directly  he has held her work in the highest regard.
+
+
+
+
+10,Which countries have the most fields of research contributions
+To figure out which countries have the most fields of research contributions, we will have to type a code in order to get the list, and the code is:
+
+select country_of_birth,count(distinct main_area) AS num_main_area
+from person
+group by country_of_birth
+order by num_main_area DESC;
